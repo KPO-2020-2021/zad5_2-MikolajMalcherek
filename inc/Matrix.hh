@@ -1,59 +1,97 @@
 #pragma once
 
 #include "size.hh"
-#include "vector.hh"
+#include "Vector.hh"
 #include <iostream>
 #include <cstdlib>
+#include <cmath>
 
+
+/** @brief Klasa Macierz.hh przechowujaca przeciazneia operatorow oraz metody dla macierzy
+
+ * Macierze sluza do przechowywania kataw wewnatrz, ktore potrzebne sa do operacji obrotu
+    @author Mikolaj Malcherek
+    @date Maj 2020
+    */
+
+
+
+
+
+template <int Size>
 class Matrix {
 
 private:
-    double value[SIZE][SIZE];               // Wartosci macierzy
+    double value[Size][Size];               // Wartosci macierzy
 
 public:
-    Matrix(double [SIZE][SIZE]);            // Konstruktor klasy
+    Matrix(double [Size][Size]);            // Konstruktor klasy
 
     Matrix();                               // Konstruktor klasy
 
-    Vector operator * (Vector tmp);           // Operator mnożenia przez wektor
+    Vector<Size> operator * (Vector<Size> tmp);           // Operator mnożenia przez wektor
 
-    Matrix operator + (Matrix tmp);
+    Matrix<Size> operator + (Matrix<Size> const &tmp);
 
-    double  &operator () (unsigned int row, unsigned int column);
+    double  operator () (int row, int column) const;
     
-    const double &operator () (unsigned int row, unsigned int column) const;
+    double &operator () (int row, int column);
+
+    double wyznacznikgaussa();
+
+    
+
+    Matrix<Size> operator * (Matrix<Size> tmp);
 };
 
-std::istream &operator>>(std::istream &in, Matrix &mat);
+template <unsigned int Size>
+std::ostream & operator << (std::ostream &out, Matrix<Size> const &mat);  
 
-std::ostream &operator<<(std::ostream &out, Matrix const &mat);
+
+template <unsigned int Size>
+std::istream & operator >> (std::istream &in, Matrix<Size> &mat);        
+
+
+
+
+
+
 
 /******************************************************************************
- |  Konstruktor klasy Matrix.                                                 |
+ |  Konstruktor klasy Matrix<Size>.                                                 |
  |  Argumenty:                                                                |
  |      Brak argumentow.                                                      |
  |  Zwraca:                                                                   |
  |      Macierz wypelnione wartoscia 0.                                       |
  */
-Matrix::Matrix() {
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
-            value[i][j] = 0;
+template <int Size>
+Matrix<Size>::Matrix() {
+    for (int i = 0; i < Size; ++i) {
+        for (int j = 0; j < Size; ++j) {
+                if(i==j)
+                {
+                    value[i][j]=1;
+                }
+                else
+                {
+                    value[i][j] = 0;
+                }
         }
     }
 }
 
 
 /******************************************************************************
- |  Konstruktor parametryczny klasy Matrix.                                   |
+ |  Konstruktor parametryczny klasy Matrix<Size>.                                   |
  |  Argumenty:                                                                |
  |      tmp - dwuwymiarowa tablica z elementami typu double.                  |
  |  Zwraca:                                                                   |
  |      Macierz wypelniona wartosciami podanymi w argumencie.                 |
  */
-Matrix::Matrix(double tmp[SIZE][SIZE]) {
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
+template <int Size>
+Matrix<Size>::Matrix(double tmp[Size][Size]) {
+    for (int i = 0; i < Size; ++i) {
+        for (int j = 0; j < Size; ++j) {
             value[i][j] = tmp[i][j];
         }
     }
@@ -68,16 +106,17 @@ Matrix::Matrix(double tmp[SIZE][SIZE]) {
  |  Zwraca:                                                                   |
  |      Iloczyn dwoch skladnikow przekazanych jako wektor.                    |
  */
-
-Vector Matrix::operator * (Vector tmp) {
-    Vector result;
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
+template <int Size>
+Vector<Size> Matrix<Size>::operator *(Vector<Size> tmp) {
+    Vector<Size> result;
+    for (int i = 0; i < Size; ++i) {
+        for (int j = 0; j < Size; ++j) {
             result[i] += value[i][j] * tmp[j];
         }
     }
     return result;
 }
+
 
 
 /******************************************************************************
@@ -88,15 +127,17 @@ Vector Matrix::operator * (Vector tmp) {
  |  Zwraca:                                                                   |
  |      Wartosc macierzy w danym miejscu tablicy.                             |
  */
-double &Matrix::operator()(unsigned int row, unsigned int column) {
+template <int Size>
+double Matrix<Size>::operator()(int row, int column) const
+{
 
-    if (row >= SIZE) {
-        std::cout << "Error: Macierz jest poza zasiegiem"; 
+    if (row >= Size) {
+        throw "Error: Macierz jest poza zasiegiem"; 
         exit(0); // lepiej byłoby rzucić wyjątkiem stdexcept
     }
 
-    if (column >= SIZE) {
-        std::cout << "Error: Macierz jest poza zasiegiem";
+    if (column >= Size) {
+        throw "Error: Macierz jest poza zasiegiem";
         exit(0); // lepiej byłoby rzucić wyjątkiem stdexcept
     }
 
@@ -112,15 +153,16 @@ double &Matrix::operator()(unsigned int row, unsigned int column) {
  |  Zwraca:                                                                   |
  |      Wartosc macierzy w danym miejscu tablicy jako stala.                  |
  */
-const double &Matrix::operator () (unsigned int row, unsigned int column) const {
+template <int Size>
+double &Matrix<Size>::operator () (int row, int column) {
 
-    if (row >= SIZE) {
-        std::cout << "Error: Macierz jest poza zasiegiem";
+    if (row >= Size) {
+        throw "Error: Macierz jest poza zasiegiem";
         exit(0); // lepiej byłoby rzucić wyjątkiem stdexcept
     }
 
-    if (column >= SIZE) {
-        std::cout << "Error: Macierz jest poza zasiegiem";
+    if (column >= Size) {
+        throw "Error: Macierz jest poza zasiegiem";
         exit(0); // lepiej byłoby rzucić wyjątkiem stdexcept
     }
 
@@ -135,10 +177,11 @@ const double &Matrix::operator () (unsigned int row, unsigned int column) const 
  |  Zwraca:                                                                   |
  |      Macierz - iloczyn dwóch podanych macierzy.                  |
  */
-Matrix Matrix::operator + (Matrix tmp) {
-    Matrix result;
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
+template <int Size>
+Matrix<Size> Matrix<Size>::operator + (Matrix<Size> const &tmp) {
+    Matrix<Size> result;
+    for (int i = 0; i < Size; ++i) {
+        for (int j = 0; j < Size; ++j) {
             result(i, j) = this->value[i][j] + tmp(i, j);
         }
     }
@@ -151,9 +194,10 @@ Matrix Matrix::operator + (Matrix tmp) {
  |      in - strumien wyjsciowy,                                              |
  |      mat - macierz.                                                         |
  */
-std::istream &operator>>(std::istream &in, Matrix &mat) {
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
+template <int Size>
+std::istream &operator>>(std::istream &in, Matrix<Size> &mat) {
+    for (int i = 0; i < Size; ++i) {
+        for (int j = 0; j < Size; ++j) {
             in >> mat(i, j);
         }
     }
@@ -167,9 +211,10 @@ std::istream &operator>>(std::istream &in, Matrix &mat) {
  |      out - strumien wejsciowy,                                             |
  |      mat - macierz.                                                        |
  */
-std::ostream &operator<<(std::ostream &out, const Matrix &mat) {
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
+template <int Size>
+std::ostream &operator<<(std::ostream &out, const Matrix<Size> &mat) {
+    for (int i = 0; i < Size; ++i) {
+        for (int j = 0; j < Size; ++j) {
             out << "| " << mat(i, j) << " | "; //warto ustalic szerokosc wyswietlania dokladnosci liczb
         }
         std::cout << std::endl;
@@ -177,3 +222,81 @@ std::ostream &operator<<(std::ostream &out, const Matrix &mat) {
     return out;
 }
 
+
+
+
+
+
+
+
+/*-------------------------------------------------------------------------------------------------------     
+|                                                                                                        |
+|       Obliczanie wyznacznika metoda Gaussa, w ktorej macierz stopniowo zamieniamy na diagonalna        |   
+|                                                                                                        |
+|--------------------------------------------------------------------------------------------------------*/
+template <int Size>
+double Matrix<Size>::wyznacznikgaussa()
+{
+     double ratio;
+	 int i,j,k;
+
+
+	 for(i=0;i<=Size-2;i++)
+	 {
+		  if(value[i][i] == 0.0)
+		  {
+			   std::cout<<"Mathematical Error!";
+			   exit(0);
+		  }
+		  for(j=i+1;j<=Size;j++)
+		  {
+			   ratio = value[j][i]/value[i][i];
+
+			   for(k=0;k<=Size;k++)
+			   {
+			  		value[j][k] = value[j][k] - ratio*value[i][k];
+			   }
+		  }
+	 }
+
+    for(int g=0;g<Size;g++)
+    {
+        for(int l=0;l<Size;l++)
+        {
+            std::cout << value[g][l] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    double wyznacznik = value[0][0];
+    
+    for (int h=0;h<Size;h++)
+    {
+        wyznacznik=value[h][h];
+    }
+    std::cout << wyznacznik ;
+    return wyznacznik;
+}
+
+
+
+
+
+
+
+
+/*       Mnozenie macierzy przez macierz       */
+
+template <int Size>
+Matrix<Size> Matrix<Size>::operator * (Matrix<Size> tmp){
+    Matrix<Size> result;
+    for(int i = 0; i < Size; ++i){
+        for(int j = 0; j < Size; ++j){    
+            result(i,j) = 0;
+            for(int k = 0; k < Size; ++k){
+                result(i,j) +=  value[i][k] * tmp(k,j);
+            }
+        }
+    }
+    return result; 
+}
