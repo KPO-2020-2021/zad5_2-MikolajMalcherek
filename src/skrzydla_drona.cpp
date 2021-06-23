@@ -12,7 +12,7 @@
 skrzydla::skrzydla(Vector3D srodek,double grubosc, double promien_r, std::string nazwa)
 {
     double tab[]={0,0,grubosc};
-    dlugosci = new Vector3D(tab);
+    dlugosci=std::make_shared<Vector3D> (tab);
     //this->nazwa to zmienna z klasy Skrzydla odziedziczonej z klasy Bryla
     this->nazwa=nazwa;
     wspol_srodka=srodek;

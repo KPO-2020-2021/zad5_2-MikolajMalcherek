@@ -20,7 +20,7 @@ Rampa::Rampa(Vector3D wspol_srodka, double dlugosc_x ,double wysokosc_y, double 
 
 
     double tab[]={dlugosc_x,wysokosc_y,glebokosc_z};
-    dlugosci = new Vector3D(tab);
+    dlugosci = std::make_shared<Vector3D> (tab);
 
 
 

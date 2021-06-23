@@ -25,7 +25,7 @@ class skrzydla : public Bryla
     
     */
     skrzydla(Vector3D srodek=Vector3D(), double glebokosc_z=30, double promien_r = 20, std::string nazwa = "../dat/skrzydla.dat");
-    ~skrzydla(){delete dlugosci;}
+
 };
 
 

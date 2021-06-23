@@ -39,7 +39,7 @@ public:
 
 Plaskowyz(Vector3D wspol_srodka=Vector3D(), double dlugosc_x=100 , double wysokosc_y=150, double glebokosc_z=100, std::string nazwa="../dat/Plaskowyz.dat");
 
-~Plaskowyz(){delete dlugosci;}
+
 
 };
 

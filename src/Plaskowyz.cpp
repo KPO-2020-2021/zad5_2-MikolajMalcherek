@@ -20,7 +20,7 @@ Plaskowyz::Plaskowyz(Vector3D wspol_srodka, double dlugosc_x ,double wysokosc_y,
 
 
     double tab[]={dlugosc_x,wysokosc_y,glebokosc_z};
-    dlugosci = new Vector3D(tab);
+    dlugosci = std::make_shared<Vector3D> (tab);
 
     wspolrzedne[0]=wspol_srodka[0]-(dlugosc_x/2);
     wspolrzedne[1]=wspol_srodka[1]+(wysokosc_y/2);

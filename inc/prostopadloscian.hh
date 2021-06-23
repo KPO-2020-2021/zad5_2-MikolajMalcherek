@@ -39,7 +39,14 @@ public:
 
 prostopadloscian(Vector3D wspol_srodka=Vector3D(), double dlugosc_x=50 , double wysokosc_y=60, double glebokosc_z=30, std::string nazwa="../dat/prostopadloscian.dat");
 
-
+   prostopadloscian &operator=(const prostopadloscian &other)
+    {
+    dlugosci=other.dlugosci;
+    wspol_wierzholkow=other.wspol_wierzholkow;
+    wspol_srodka=other.wspol_srodka;
+    nazwa=other.nazwa;
+        return *this;
+    }
 
 };
 

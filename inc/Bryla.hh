@@ -5,12 +5,12 @@
 #include "Matrix3x3.hh"
 #include <vector>
 #include <fstream>
-
+#include <memory>
 
 class Bryla
 {
     protected:
-    Vector3D *dlugosci;
+        std::shared_ptr<Vector3D> dlugosci;
     std::vector<Vector3D> wspol_wierzholkow;    // tworzymy kontener zmiennych o nazwie wspol_wierzcholkow przetrzymujacy zmienne typu Vector3D
     Vector3D wspol_srodka;
     std::string nazwa; // tworzymy zmienna typu string nazwa tutaj, aby latwo odwolac sie pozniej do brył i wpisac im wartosci 
@@ -45,7 +45,7 @@ class Bryla
 
     void zapis_bryly();
 
-    ~Bryla(){delete dlugosci;}
+   
 
 };
 

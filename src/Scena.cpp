@@ -15,7 +15,7 @@ Scena::Scena()
     Lacze.UstawZakresZ(-500,500);
 
     numer_drona=0;
-    numer_elementu=0;
+    numer_elementu=6;
    
 
     double tablica_wymiarow[3]={1000,1000,0};
@@ -25,25 +25,23 @@ Scena::Scena()
 
     Vector3D srodek_przeszkody;
     for(int i=0 ; i<4 ; i++)
-    {
+
     srodek_przeszkody[0]=rand()%450-225;
     srodek_przeszkody[1]=rand()%450-225;
     srodek_przeszkody[2]=50;
-    int zmienna_losowa=rand()%3;
-    if(zmienna_losowa==1)
-        {
-            Lista_przeszkod.push_front(std::make_shared<Plaskowyz>(srodek_przeszkody, 100, 150 , 100 , "../dat/Plaskowyz1.dat"));
-        }
-    else if(zmienna_losowa==2)
-        {
-            Lista_przeszkod.push_front(std::make_shared<Gora>(srodek_przeszkody, 150, 80 , 100 , "../dat/Plaskowyz1.dat"));
-        }
-    else if(zmienna_losowa==3)
-        {
-            Lista_przeszkod.push_front(std::make_shared<Rampa>(srodek_przeszkody, 230, 150 , 100 , "../dat/Plaskowyz1.dat"));
-        }
-        numer_elementu++;
-    }
+    Lista_przeszkod.push_front(std::make_shared<Plaskowyz>(srodek_przeszkody, 100, 150 , 100 , "../dat/Plaskowyz1.dat"));
+
+    srodek_przeszkody[0]=rand()%450-225;
+    srodek_przeszkody[1]=rand()%450-225;
+    srodek_przeszkody[2]=50;
+    Lista_przeszkod.push_front(std::make_shared<Gora>(srodek_przeszkody, 150, 80 , 100 , "../dat/Gora1.dat"));
+    
+    srodek_przeszkody[0]=rand()%450-225;
+    srodek_przeszkody[1]=rand()%450-225;
+    srodek_przeszkody[2]=50;
+    Lista_przeszkod.push_front(std::make_shared<Rampa>(srodek_przeszkody, 230, 150 , 100 , "../dat/Rampa1.dat"));
+
+
 
     for(std::list<std::shared_ptr<Bryla>>::const_iterator a=Lista_przeszkod.begin() ; a != Lista_przeszkod.end(); a++)
     {
